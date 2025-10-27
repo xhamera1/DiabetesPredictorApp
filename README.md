@@ -2,7 +2,6 @@
 
 Endpoints:
 
-
 ## AI – FastAPI (tylko predykcja)
 
 * POST /v1/predict – przyjmuje dokładnie 5 pól: { hba1c_level: float, blood_glucose_level: int, bmi: float, age: float, smoking_history: int } i zwraca: { prediction: 0|1, probability: float }; bez autoryzacji, wołane wyłącznie przez backend **.**
@@ -38,4 +37,4 @@ Uwagi do kontraktów:
 * GET /register – rejestracja; public.
 * GET /predict – ankieta (pobiera domyślne dane profilu z /users/me i pozwala nadpisać w formularzu); wymaga zalogowania; wysyła POST do /api/predictions.
 * GET /history – historia predykcji zalogowanego użytkownika; wymaga zalogowania; GET /api/predictions.
-* GET /profile – podgląd i edycja profilu; wymaga zalogowania; używa GET/PUT /users/me.
+* GET /profile – podgląd i edycja profilu; wymaga zalogowania; używa GET/PUT /users/me.   
