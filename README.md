@@ -6,6 +6,7 @@ Endpoints:
 
 * POST /v1/predict – przyjmuje dokładnie 5 pól: { hba1c_level: float, blood_glucose_level: int, bmi: float, age: float, smoking_history: int } i zwraca: { prediction: 0|1, probability: float }; bez autoryzacji, wołane wyłącznie przez backend **.**
 
+http://localhost:8080/swagger-ui/html
 ## Backend – Spring Boot (API dla frontu)
 
 Uwierzytelnianie i użytkownicy:
