@@ -7,31 +7,56 @@ Endpoints:
 * POST /v1/predict – przyjmuje dokładnie 5 pól: { hba1c_level: float, blood_glucose_level: int, bmi: float, age: float, smoking_history: int } i zwraca: { prediction: 0|1, probability: float }; bez autoryzacji, wołane wyłącznie przez backend **.**
 
 http://localhost:8080/swagger-ui/html
-## Backend – Spring Boot (API dla frontu)
 
-Uwierzytelnianie i użytkownicy:
 
-* POST /auth/register – rejestracja nowego użytkownika (email, hasło; opcjonalnie imię, nazwisko, data urodzenia).
-* POST /auth/login – logowanie; zwraca access JWT; bez refresh tokenów.
-* GET /auth/me – dane aktualnego użytkownika; wymaga JWT.
-* PUT /users/me – pełna edycja profilu zalogowanego użytkownika (imię, nazwisko, data urodzenia, płeć opcjonalnie); wymaga JWT.
-* GET /users/me – alias do /auth/me, aby UI mógł łatwo wczytać dane w formularzu; wymaga JWT.
-* Admin opcjonalnie:
-  * GET /admin/users – lista użytkowników (tylko jeśli potrzebujesz panelu admina); wymaga roli ADMIN.
-  * PATCH /admin/users/{id}/role – zmiana roli na USER/ADMIN; wymaga roli ADMIN.
 
-Predykcje:
+# Dokumentacja API Backendu
 
-* POST /api/predictions – przyjmuje rozbudowany formularz użytkownika (np. weight, height, dateOfBirth, hba1cLevel, bloodGlucoseLevel, smokingHistory, opcjonalnie inne pola UI); backend przelicza age i BMI, mapuje do dokładnych 5 cech wymaganych przez model i woła AI; wymaga JWT; zwraca: { id, prediction, probability, createdAt }.
-* GET /api/predictions – lista historii predykcji zalogowanego użytkownika (paginacja i filtry from/to opcjonalne); wymaga JWT.
-* GET /api/predictions/{id} – szczegóły pojedynczej predykcji użytkownika; wymaga JWT.
-* DELETE /api/predictions/{id} – usunięcie własnego wpisu z historii (jeśli chcesz na to pozwolić); wymaga JWT.
+http://localhost:8080/swagger-ui.html
 
-Uwagi do kontraktów:
+Poniżej znajduje się lista dostępnych endpointów REST API, podzielona według funkcjonalności.
 
-* Backend zawsze buduje wektor [HbA1c, Glucose, BMI, Age, Smoking] w takiej kolejności, by pozostać zgodnym z modelem zapisanym w .pkl; model zwraca predict oraz predict_proba dla klasy pozytywnej, które mapowane są na prediction i probability zwracane do frontu.
-* Dodatkowe pola z formularza (np. waga, wzrost, płeć, ciśnienie) nie są wysyłane do AI, ale mogą być zapisane przy predykcji do historii dla wygody użytkownika; jeśli podane są weight i height, BMI obliczane jako bmi = weight / (height/100)^2; jeśli podana jest data urodzenia, obliczane jest age w latach na dzień zapytania.
+## 🔑 Authentication
 
+Endpointy odpowiedzialne za rejestrację, logowanie i zarządzanie sesją użytkownika.
+
+| Metoda | Ścieżka | Opis | Dostęp |
+|--------|---------|------|--------|
+| `POST` | `/auth/signup` | Rejestracja nowego użytkownika. | Public |
+| `POST` | `/auth/login` | Logowanie i uzyskanie tokena JWT. | Public |
+| `GET` | `/auth/me` | Pobranie danych o zalogowanym użytkowniku. | User |
+
+## 👤 User Profile
+
+Endpointy do zarządzania profilem zalogowanego użytkownika.
+
+| Metoda | Ścieżka | Opis | Dostęp |
+|--------|---------|------|--------|
+| `GET` | `/users/me` | Pobranie profilu zalogowanego użytkownika. | User |
+| `PUT` | `/users/me` | Aktualizacja profilu zalogowanego użytkownika. | User |
+
+## 🔮 Predictions
+
+Endpointy do tworzenia i zarządzania historią predykcji cukrzycy.
+
+| Metoda | Ścieżka | Opis | Dostęp |
+|--------|---------|------|--------|
+| `POST` | `/api/predictions` | Tworzy nową predykcję na podstawie danych. | User |
+| `GET` | `/api/predictions` | Pobiera paginowaną historię predykcji. | User |
+| `GET` | `/api/predictions/{id}` | Pobiera szczegóły konkretnej predykcji. | User |
+| `DELETE` | `/api/predictions/{id}` | Usuwa konkretną predykcję z historii. | User |
+
+## 🛠️ Admin Panel
+
+Endpointy do zarządzania użytkownikami w systemie. Wymagana rola `ADMIN`.
+
+| Metoda | Ścieżka | Opis |
+|--------|---------|------|
+| `GET` | `/admin/users` | Pobiera paginowaną listę wszystkich użytkowników. |
+| `POST` | `/admin/users` | Tworzy nowego użytkownika. |
+| `GET` | `/admin/users/{id}` | Pobiera szczegóły konkretnego użytkownika. |
+| `PUT` | `/admin/users/{id}` | Aktualizuje dane konkretnego użytkownika. |
+| `DELETE` | `/admin/users/{id}` | Usuwa konkretnego użytkownika. |
 ## Frontend – ścieżki UI
 
 * GET /login – logowanie; public.
