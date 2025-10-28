@@ -4,6 +4,15 @@ import joblib
 import numpy as np
 from pathlib import Path
 
+
+# uruchamianie aplikacji:
+# w folderze ~/Desktop/MyProjects/DiabetesPredictor/DiabetesPredictorApp/ai-service
+#   $ cd ~/Desktop/MyProjects/DiabetesPredictor/DiabetesPredictorApp/ai-service
+# komenda: 
+#   $ python -m uvicorn app.main:app --reload --port 8000
+
+
+
 app = FastAPI(title="Diabetes AI Service", version="1.0.0")
 
 app.add_middleware(
