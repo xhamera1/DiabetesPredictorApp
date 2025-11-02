@@ -6,29 +6,19 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
 import App from "./App";
 import { AuthenticationContextProvider } from "./contexts/AuthenticationContextProvider";
+import { ThemeContextProvider } from "./contexts/ThemeContextProvider";
 
 const queryClient = new QueryClient();
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#1976d2",
-    },
-    secondary: {
-      main: "#dc004e",
-    },
-  },
-});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthenticationContextProvider>
-          <ThemeProvider theme={theme}>
+          <ThemeContextProvider>
             <CssBaseline />
             <App />
-          </ThemeProvider>
+          </ThemeContextProvider>
         </AuthenticationContextProvider>
       </QueryClientProvider>
     </BrowserRouter>

@@ -144,7 +144,7 @@ export function PredictionForm({
 
       {apiError && (
         <Alert severity="error" sx={{ mt: 3 }}>
-          {`Prediction failed: ${apiError.message}`}
+          {`Prediction failed: cannot make prediction now, try again later.`}
         </Alert>
       )}
 

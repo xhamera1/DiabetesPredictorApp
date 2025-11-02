@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthenticationContext } from "../contexts/AuthenticationContextProvider";
 import { useMe } from "../hooks/useMe";
 import { useQueryClient } from "@tanstack/react-query";
+import { ThemeToggleButton } from "./ThemeToggleButton";
 
 export const NavBar = () => {
   const navigate = useNavigate();
@@ -38,6 +39,8 @@ export const NavBar = () => {
         >
           Diabetes Prediction
         </Typography>
+
+        <ThemeToggleButton />
 
         {isAuthenticated ? (
           <Box sx={{ display: "flex", alignItems: "center" }}>
