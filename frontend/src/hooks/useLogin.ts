@@ -1,30 +1,31 @@
-import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext';
-import { login, type LoginRequest } from '../services/authService';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { authenticationService } from "../services/authenticationService";
+import { useAuthenticationContext } from "../contexts/AuthenticationContextProvider";
+import type { LoginRequest, LoginResponse } from "../utils/types";
 
-export function useLogin() {
-    const { setToken } = useAuth();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+export const useLogin = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { saveToken } = useAuthenticationContext();
 
-    const doLogin = async (payload: LoginRequest) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const { token } = await login(payload);
-            setToken(token);
-        }
-        catch (e) {
-            const msg = e instanceof Error ? e.message : 'Unknown error';
-            setError(msg);
-            throw e;
+  return useMutation<LoginResponse, Error, LoginRequest>({
+    mutationFn: authenticationService.login,
+    onSuccess: async (data) => {
+      const token = data.accessToken;
+      console.log("[useLogin] Token received:", token);
 
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { doLogin, isLoading, error };
-
-}
+      if (token) {
+        saveToken(token);
+        await queryClient.invalidateQueries({ queryKey: ["me"] });
+        console.log("[useLogin] Navigating to home page...");
+        navigate("/");
+      } else {
+        console.error("[useLogin] CRITICAL ERROR: Response received but accessToken is missing!");
+      }
+    },
+    onError: (error) => {
+      console.error("[useLogin] Login mutation failed:", error.message);
+    },
+  });
+};
