@@ -4,20 +4,6 @@
 Patryk Chamera - [chamerapatryk@gmail.com](mailto:chamerapatryk@gmail.com)
 
 
-
-## 📋 Table of Contents
-1.  [About The Project](#about-the-project)
-2.  [Key Features](#key-features)
-3.  [Application Architecture](#application-architecture)
-4.  [Tech Stack](#tech-stack)
-5.  [Core Logic: How It Works](#core-logic-how-it-works)
-    - [User Flow](#user-flow)
-    - [Authentication & Authorization](#authentication--authorization)
-6.  [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-7.  [License](#license)
-
 ## 📖 About The Project
 
 **Diabetes Prediction** is a full-stack web application designed to predict the likelihood of an individual having diabetes based on key health metrics. The project integrates a highly accurate machine learning model with a robust backend and a modern, responsive frontend to provide a seamless user experience.
